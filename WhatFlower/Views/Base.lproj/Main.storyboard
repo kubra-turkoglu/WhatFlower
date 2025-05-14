@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rtY-Sm-S2O">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rtY-Sm-S2O">
                                 <rect key="frame" x="0.0" y="103" width="393" height="749"/>
                             </imageView>
                         </subviews>
@@ -31,19 +31,78 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9HR-ae-gQ0">
-                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="ZFL-z8-5fq">
-                            <connections>
-                                <action selector="cameraPressedButton:" destination="BYZ-38-t0r" id="eBG-fw-tYm"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="camera" id="ZFL-z8-5fq">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="cameraPressedButton:" destination="BYZ-38-t0r" id="eBG-fw-tYm"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="bookmarks" id="nfA-VP-SsR">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="bookmarksButtonPressed:" destination="BYZ-38-t0r" id="fwn-1t-6Fa"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="bookmarksButton" destination="nfA-VP-SsR" id="KOT-1g-tc9"/>
                         <outlet property="imageView" destination="rtY-Sm-S2O" id="fTO-DQ-eze"/>
+                        <segue destination="R8q-7t-xTk" kind="presentation" identifier="goToResult" id="tJE-UD-cOO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="886.25954198473278" y="-27.464788732394368"/>
+        </scene>
+        <!--Defining Flower Controller-->
+        <scene sceneID="ixl-cS-ySv">
+            <objects>
+                <viewController id="R8q-7t-xTk" customClass="DefiningFlowerController" customModule="WhatFlower" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cro-5s-t5O">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Z8b-sG-9VQ">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="507.66666666666669"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKj-8l-fOo">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="461"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="mZ2-9R-Tln" userLabel="title">
+                                        <rect key="frame" x="0.0" y="464" width="393" height="20.333333333333314"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" showsExpansionTextWhenTruncated="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gk8-C2-YpS" userLabel="extract">
+                                        <rect key="frame" x="0.0" y="487.33333333333331" width="393" height="20.333333333333314"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Label">
+                                                <attributes>
+                                                    <font key="NSFont" metaFont="system" size="17"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="3cH-kq-SI6"/>
+                        <color key="backgroundColor" red="0.72156862745098038" green="0.9137254901960784" blue="0.58039215686274503" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <connections>
+                        <outlet property="extractTextLabel" destination="gk8-C2-YpS" id="CNV-U0-vCR"/>
+                        <outlet property="wikiTitleLabel" destination="mZ2-9R-Tln" id="Vty-Ls-NZx"/>
+                        <outlet property="wikipediaImageView" destination="zKj-8l-fOo" id="sTk-Hc-tbG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tE5-rg-COO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1646.5648854961833" y="-27.464788732394368"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="s9i-Dx-ffr">
@@ -53,9 +112,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FRI-Qk-tB6">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.12549019607843137" green="0.74901960784313726" blue="0.41960784313725491" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <navigationBarAppearance key="standardAppearance"/>
                         <navigationBarAppearance key="scrollEdgeAppearance">
-                            <color key="backgroundColor" red="0.1137254902" green="0.60784313729999995" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" red="0.12549019607843137" green="0.74901960784313726" blue="0.41960784313725491" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </navigationBarAppearance>
                     </navigationBar>
                     <nil name="viewControllers"/>
