@@ -11,7 +11,6 @@ import CoreML
 import Vision
 import Alamofire
 import SwiftyJSON
-import SDWebImage
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPickerViewControllerDelegate, WikipediaManagerDelegate {
     func didUpdateWikipediaData(title: String, extract: String, imageURL: String) {
@@ -20,9 +19,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func didFailWithError(error: any Error) {
         print("error happened in ViewController delegate: \(error)")
     }
-
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var LabelView: UIView!
     @IBOutlet weak var bookmarksButton: UIBarButtonItem!
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    @IBOutlet weak var textLabel: UILabel!
+    
     
     let imagePicker = UIImagePickerController()
     
@@ -36,8 +40,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         bookmarksButton.isEnabled = false
         bookmarksButton.tintColor = .clear
         wikipediaManager.delegate = self
+        LabelView.layer.cornerRadius = 10
+        LabelView.clipsToBounds = true
+        titleLabel.font = UIFont.systemFont(ofSize: 22)
+        titleLabel.text = Constant().titleText
+        titleLabel.sizeToFit()
+        textLabel.font = UIFont.systemFont(ofSize: 17)
+        textLabel.text = Constant().bodyText
+        textLabel.sizeToFit()
+        UIView.animate(withDuration: 0.3) {
+            self.LabelView.layoutIfNeeded()
+        }
+        let newHeight = titleLabel.frame.height + textLabel.frame.height + 5
+        LabelView.frame.size.height = newHeight
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .clear
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
    
     @IBAction func cameraPressedButton(_ sender: UIBarButtonItem) {
         let actionSheet = UIAlertController(title: "Choose a photo", message: "You must choose a photo.", preferredStyle: .actionSheet)
@@ -67,6 +94,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
+        picker.isEditing = true
         present(picker, animated: true)
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -78,7 +106,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             imageView.image = userTakedPhoto
         }
-        //Once the user finished picking the image, we need to dismiss this imagePicker
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
@@ -92,106 +119,35 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             destinationVC.flowerName = self.navigationItem.title // detected flower type
         }
     }
-
     func detect(image: CIImage) {
-        // 📦 Mevcut .mlpackage dosyalarını listele — debug için süper!
-        let paths = Bundle.main.paths(forResourcesOfType: "mlpackage", inDirectory: nil)
-        print("Bulunan .mlpackage dosyaları: \(paths)")
-        
-        // 🔍 Model dosyasını bulmaya çalış
-        guard let modelURL = Bundle.main.url(forResource: "FlowerClassifier", withExtension: "mlmodel") else {
-            fatalError("Model dosyası bulunamadı! 🤷‍♀️")
-        }
-        
-        // 🛠️ Modeli derle
-        guard let compiledModelURL = try? MLModel.compileModel(at: modelURL) else {
-            fatalError("Model derlenemedi 😤")
-        }
-        
-        // 📥 Derlenmiş modeli yükle
-        guard let coreMLModel = try? MLModel(contentsOf: compiledModelURL) else {
-            fatalError("Model yüklenemedi 🙃")
-        }
-        
-        // 👁️‍🗨️ Vision modeline çevir
-        guard let visionModel = try? VNCoreMLModel(for: coreMLModel) else {
-            fatalError("VNCoreMLModel oluşturulamadı 😬")
-        }
-
-        // 🔍 Görüntü sınıflandırma isteği
-        let request = VNCoreMLRequest(model: visionModel) { request, error in
-            guard let classification = request.results?.first as? VNClassificationObservation else {
-                fatalError("Model resmi işleyemedi! 🤖💥")
+            let config = MLModelConfiguration()
+                guard let model = try? VNCoreMLModel(for: FlowerClassifier(configuration: config).model) else {
+                    fatalError("Loading CoreML Model Failed.")
+                }
+                
+                let request = VNCoreMLRequest(model: model) { request, error in
+                    guard let classification = request.results?.first as? VNClassificationObservation else {
+                        fatalError("Model failed to process image.")
+                    }
+                    
+                    let flowerType = classification.identifier
+                    
+                    self.navigationItem.title = flowerType.capitalized
+                    self.bookmarksButton.isEnabled = true
+                    self.bookmarksButton.tintColor = .systemBlue
+                    self.titleLabel.text = "Discover \(flowerType) from Wikipedia."
+                    self.textLabel.text = "Learn information about \(flowerType) from Wikipedia."
+                    self.wikipediaManager.fetchModelFromWikipedia(flowerName: classification.identifier)
+                }
+                
+                let handler = VNImageRequestHandler(ciImage: image)
+                
+                do {
+                    try handler.perform([request])
+                } catch {
+                    print(error)
+                }
             }
-
-            let flowerType = classification.identifier.capitalized
-            print("Tahmin edilen çiçek: \(flowerType) 🌸")
-
-            // 🧠 Wikipedia'dan bilgi çekme
-            self.navigationItem.title = flowerType
-            self.bookmarksButton.isEnabled = true
-            self.bookmarksButton.tintColor = .systemBlue
-
-            var wikiManager = WikipediaManager()
-            wikiManager.delegate = self
-            wikiManager.fetchModelFromWikipedia(flowerName: flowerType)
-        }
-
-        // 🖼️ Görüntü işleyiciyi çalıştır
-        let handler = VNImageRequestHandler(ciImage: image)
-        do {
-            try handler.perform([request])
-        } catch {
-            print("Görüntü işleme hatası: \(error.localizedDescription)")
-        }
-    }
-
-//    func detect(image: CIImage) {
-//        let paths = Bundle.main.paths(forResourcesOfType: "mlpackage", inDirectory: nil)
-//        print("Bulunan .mlpackage dosyaları: \(paths)")
-//        
-//        guard let modelURL = Bundle.main.url(forResource: "FlowerClassifier", withExtension: "mlpackage") else {
-//                fatalError("Model file didn't found!")
-//            }
-//        guard let compiledModelURL = try? MLModel.compileModel(at: modelURL) else {
-//                fatalError("Model derlenemedi 😤")
-//            }
-//        guard let coreMLModel = try? MLModel(contentsOf: compiledModelURL) else {
-//                fatalError("Model yüklenemedi 🙃")
-//            }
-//        guard let visionModel = try? VNCoreMLModel(for: coreMLModel) else {
-//                fatalError("VNCoreMLModel oluşturulamadı 😬")
-//            }
-//        
-////        guard let model = try? VNCoreMLModel(for: FlowerClassifier(configuration: MLModelConfiguration()).model) else {
-////            fatalError("Loading CoreML Model Failed.")
-////        }
-//
-//        let request = VNCoreMLRequest(model: visionModel) { request, error in
-//            guard let classification = request.results?.first as? VNClassificationObservation else {
-//                fatalError("Model failed to process image.")
-//            }
-//            let flowerType = classification.identifier.capitalized
-//            self.wikipediaManager.fetchModelFromWikipedia(flowerName: classification.identifier)
-//
-//
-//            self.navigationItem.title = flowerType
-//            self.bookmarksButton.isEnabled = true
-//            self.bookmarksButton.tintColor = .systemBlue
-//
-//            var wikiManager = WikipediaManager()
-//            wikiManager.delegate = self
-//            wikiManager.fetchModelFromWikipedia(flowerName: flowerType)
-//        }
-//        
-//        let handler = VNImageRequestHandler(ciImage: image)
-//        
-//        do {
-//            try handler.perform([request])
-//        } catch {
-//            print("Görüntü işleme hatası: \(error)")
-//        }
-//    }
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         

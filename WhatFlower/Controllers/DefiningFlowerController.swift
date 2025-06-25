@@ -26,12 +26,11 @@ class DefiningFlowerController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         wikipediaManager.delegate = self
-        
+        wikiTitleLabel.font = UIFont.systemFont(ofSize: 22)
+        extractTextLabel.font = UIFont.systemFont(ofSize: 17)
         if let flower = flowerName {
             wikipediaManager.fetchModelFromWikipedia(flowerName: flower)
         }
-        print("🌸 DefiningFlowerController açıldı mı acaba? Hı?")
-        wikiTitleLabel.text = "HELLO TEST!"
     }
 }
 //MARK: - WikipediaManagerDelegate
