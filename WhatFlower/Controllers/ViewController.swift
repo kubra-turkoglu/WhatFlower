@@ -48,11 +48,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         textLabel.font = UIFont.systemFont(ofSize: 17)
         textLabel.text = Constant().bodyText
         textLabel.sizeToFit()
-        UIView.animate(withDuration: 0.3) {
-            self.LabelView.layoutIfNeeded()
-        }
-        let newHeight = titleLabel.frame.height + textLabel.frame.height + 5
-        LabelView.frame.size.height = newHeight
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -131,11 +126,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                     
                     let flowerType = classification.identifier
-                    
-                    self.navigationItem.title = flowerType.capitalized
+                    if flowerType == "barbeton daisy" {
+                        let barbetonDaisy = "Gerbera jamesonii"
+                        return self.wikipediaManager.fetchModelFromWikipedia(flowerName: barbetonDaisy)
+                    }
+                    let capitalizedFlowerType = flowerType.capitalized
+                    self.navigationItem.title = capitalizedFlowerType
                     self.bookmarksButton.isEnabled = true
-                    self.bookmarksButton.tintColor = .systemBlue
-                    self.titleLabel.text = "Discover \(flowerType) from Wikipedia."
+                    self.bookmarksButton.tintColor = .systemGreen
+                    self.titleLabel.text = "Discover \(capitalizedFlowerType) from Wikipedia."
                     self.textLabel.text = "Learn information about \(flowerType) from Wikipedia."
                     self.wikipediaManager.fetchModelFromWikipedia(flowerName: classification.identifier)
                 }

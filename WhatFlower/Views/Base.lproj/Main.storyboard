@@ -29,14 +29,14 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bz9-NR-5pb" userLabel="LabelView">
                                         <rect key="frame" x="8" y="550" width="377" height="145"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Define Classification of Flower" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b9G-PA-UfC">
-                                                <rect key="frame" x="12" y="8" width="353" height="24.666666666666671"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Define Classification of Flower" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b9G-PA-UfC">
+                                                <rect key="frame" x="12" y="-8" width="353" height="51"/>
                                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="18"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="You should select flower picture from your Galery or take picture tjhe flower what you want to define its classification." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5J-Pd-ytW">
-                                                <rect key="frame" x="12" y="40.666666666666629" width="353" height="18"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="You should select flower picture from your Galery or take picture tjhe flower what you want to define its classification." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5J-Pd-ytW">
+                                                <rect key="frame" x="12" y="51" width="353" height="54"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -47,8 +47,8 @@
                                             <constraint firstItem="N5J-Pd-ytW" firstAttribute="top" secondItem="b9G-PA-UfC" secondAttribute="bottom" constant="8" id="5ve-FW-zLA"/>
                                             <constraint firstItem="b9G-PA-UfC" firstAttribute="leading" secondItem="bz9-NR-5pb" secondAttribute="leading" constant="12" id="Lms-gb-QuV"/>
                                             <constraint firstItem="N5J-Pd-ytW" firstAttribute="top" secondItem="b9G-PA-UfC" secondAttribute="bottom" constant="8" id="bo8-EB-9ee"/>
-                                            <constraint firstItem="N5J-Pd-ytW" firstAttribute="bottom" secondItem="bz9-NR-5pb" secondAttribute="bottom" constant="-20" id="hzN-U4-iDj"/>
-                                            <constraint firstItem="b9G-PA-UfC" firstAttribute="top" secondItem="bz9-NR-5pb" secondAttribute="top" constant="8" id="qxe-uk-cyg"/>
+                                            <constraint firstItem="N5J-Pd-ytW" firstAttribute="bottom" secondItem="bz9-NR-5pb" secondAttribute="bottom" constant="-40" id="hzN-U4-iDj"/>
+                                            <constraint firstItem="b9G-PA-UfC" firstAttribute="top" secondItem="bz9-NR-5pb" secondAttribute="top" constant="-8" id="qxe-uk-cyg"/>
                                             <constraint firstAttribute="trailing" secondItem="N5J-Pd-ytW" secondAttribute="trailing" constant="12" id="uzw-QV-G5D"/>
                                             <constraint firstItem="N5J-Pd-ytW" firstAttribute="leading" secondItem="bz9-NR-5pb" secondAttribute="leading" constant="12" id="v4a-oV-GF1"/>
                                             <constraint firstAttribute="trailing" secondItem="b9G-PA-UfC" secondAttribute="trailing" constant="12" id="ykq-wb-4qf"/>
@@ -87,14 +87,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="9HR-ae-gQ0">
                         <rightBarButtonItems>
-                            <barButtonItem image="camera.shutter.button.fill" catalog="system" id="ZFL-z8-5fq">
+                            <barButtonItem title="camera" image="camera.shutter.button.fill" catalog="system" id="eSr-0N-XMB">
                                 <color key="tintColor" systemColor="tintColor"/>
                                 <connections>
-                                    <action selector="cameraPressedButton:" destination="BYZ-38-t0r" id="eBG-fw-tYm"/>
+                                    <action selector="cameraPressedButton:" destination="BYZ-38-t0r" id="umw-Om-o1a"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Wikipedia" id="nfA-VP-SsR">
-                                <color key="tintColor" systemColor="tintColor"/>
+                                <color key="tintColor" red="0.22915154700000001" green="0.37588495020000001" blue="0.092317990959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="bookmarksButtonPressed:" destination="BYZ-38-t0r" id="fwn-1t-6Fa"/>
                                 </connections>
