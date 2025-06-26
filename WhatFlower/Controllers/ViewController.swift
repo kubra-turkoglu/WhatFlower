@@ -24,15 +24,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var bookmarksButton: UIBarButtonItem!
     
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var textLabel: UILabel!
     
-    
     let imagePicker = UIImagePickerController()
-    
     var wikipediaManager = WikipediaManager()
-    
     let url = "https://en.wikipedia.org/w/api.php"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker.delegate = self
@@ -158,7 +155,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             provider.loadObject(ofClass: UIImage.self) { image, error in
                 DispatchQueue.main.async {
                     if let selectedImage = image as? UIImage {
+                        guard let convertedCIImage = CIImage(image: selectedImage) else {
+                            fatalError("Could not convert the UIImage to CIImage")
+                        }
                         self.imageView.image = selectedImage
+                        self.detect(image: convertedCIImage)
                     }
                 }
             }
